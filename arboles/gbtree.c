@@ -86,7 +86,9 @@ GBTree gbtree_copiar(GBTree arbol, FuncionCopiadora copy){
 }
 
 int gbtree_es_hoja(GBTree arbol){
-  if(gbtree_empty(arbol) == 1 || (NULL == arbol->left && NULL == arbol->right))
+  if(gbtree_empty(arbol) == 1)
+    return 0;
+  if(NULL == arbol->left && NULL == arbol->right)
     return 1;
   return 0;
 }
@@ -102,4 +104,30 @@ int gbtree_altura(GBTree arbol){
   if(altura_izq > altura_der)
     return altura_izq;
   return altura_der;
+}
+
+int gbtree_nnodos_profundidad(GBTree arbol, int profundidad){
+  if(gbtree_empty(arbol) == 1 || profundidad < 0)
+    return 0;
+  if(profundidad == 0)
+    return 1;
+  
+  return gbtree_nnodos_profundidad(arbol->left, profundidad - 1) +
+         gbtree_nnodos_profundidad(arbol->right, profundidad - 1);
+}
+
+int gbtree_profundidad(GBTree arbol, void* dato, FuncionComparadora comp){
+  if(gbtree_empty(arbol) == 1)
+    return -1;
+  if(comp(arbol->dato, dato) == 0){
+    return 0;
+  }
+  int profundidad_izq = gbtree_profundidad(arbol->left, dato, comp);
+  if(-1 == profundidad_izq){
+    int profundidad_der = gbtree_profundidad(arbol->right, dato, comp);
+    if(-1 == profundidad_der)
+      return -1;
+    return 1 + profundidad_der;
+  }
+  return 1 + profundidad_izq;
 }

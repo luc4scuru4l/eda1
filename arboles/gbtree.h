@@ -76,5 +76,15 @@ int gbtree_es_hoja(GBTree);
  */
 int gbtree_altura(GBTree);
 
-int btree_nnodos_profundidad();
+/**
+ * Retorna la cantidad de nodos en la profundidad dada
+ */
+int gbtree_nnodos_profundidad(GBTree, int);
+
+/**
+ * Retorna la profundida del nodo que contiene el dato dado, y -1 si el número no se encuentra en el árbol. 
+ * La búsqueda será PREORDER, se retorna la primera altura encontrada.
+ */
+int gbtree_profundidad(GBTree, void*, FuncionComparadora);
+
 #endif
