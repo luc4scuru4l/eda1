@@ -1,3 +1,4 @@
+#include "../ghelpers.h"
 #ifndef __GBTREE_H__
 #define __GBTREE_H__
 
@@ -6,11 +7,6 @@ typedef struct _GBTree {
   struct _GBTree* left;
   struct _GBTree* right;
 }* GBTree;
-
-typedef void (*FuncionDestructora) (void*);
-typedef void (*FuncionVisitante) (void*);
-typedef int (*FuncionComparadora) (void*, void*);
-typedef void* (*FuncionCopiadora) (void*);
 
 typedef enum {
   BTREE_RECORRIDO_IN,
@@ -86,5 +82,10 @@ int gbtree_nnodos_profundidad(GBTree, int);
  * La búsqueda será PREORDER, se retorna la primera altura encontrada.
  */
 int gbtree_profundidad(GBTree, void*, FuncionComparadora);
+
+/**
+ * Recorre un arbol utilizando el algoritmo BFS. 
+ */
+void gbtree_recorrer_bfs_i(GBTree arbol, FuncionVisitante visit);
 
 #endif

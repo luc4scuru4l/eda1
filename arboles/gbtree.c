@@ -1,4 +1,5 @@
 #include "gbtree.h"
+#include "../colas/gcola.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -130,4 +131,20 @@ int gbtree_profundidad(GBTree arbol, void* dato, FuncionComparadora comp){
     return 1 + profundidad_der;
   }
   return 1 + profundidad_izq;
+}
+
+void gbtree_recorrer_bfs_i(GBTree arbol, FuncionVisitante visit){
+  if(gbtree_empty(arbol) == 1)
+    return;
+  GCola cola = gcola_crear();
+  cola = gcola_encolar(cola, arbol);
+  while(gcola_es_vacia(cola) == 0){
+    GBTree nodo = (GBTree) gcola_inicio(cola);
+    visit(nodo->dato);
+    gcola_desencolar(&cola, NULL);
+    if(gbtree_empty(nodo->left) == 0)
+      cola = gcola_encolar(cola, nodo->left);
+    if(gbtree_empty(nodo->right) == 0)
+      cola = gcola_encolar(cola, nodo->right);
+  }
 }

@@ -1,3 +1,4 @@
+#include "../ghelpers.h"
 #ifndef __GLIST_H__
 #define __GLIST_H__
 
@@ -7,8 +8,6 @@ typedef struct _GNodo {
 } GNodo;
 
 typedef GNodo* GList;
-typedef void (*FuncionDestructora)(void* dato);
-typedef void (*FuncionVisitante)(void* dato);
 
 /**
  * Crea una lista general vacía
