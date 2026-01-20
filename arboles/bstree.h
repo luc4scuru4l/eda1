@@ -32,4 +32,9 @@ BSTree bstree_insertar(BSTree, void *, FuncionCopiadora, FuncionComparadora);
 void bstree_recorrer(BSTree, BTreeOrdenDeRecorrido, FuncionVisitanteExtra,
                      void *extra);
 
+/**
+ * Elimina un nodo de un ABB.
+ */
+BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora, FuncionDestructora);
+
 #endif //__BSTREE_H__

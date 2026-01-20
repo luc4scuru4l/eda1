@@ -61,3 +61,28 @@ void bstree_recorrer(GBTree arbol, BTreeOrdenDeRecorrido recorrido, FuncionVisit
   if(BTREE_RECORRIDO_POST == recorrido)
     visit(arbol->dato, extra);
 }
+
+BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, FuncionDestructora destr){
+  if(gbtree_empty(arbol))
+    return NULL;
+  
+  int comparacion = comp(dato, arbol->dato);
+
+  if(comparacion < 0){
+    return bstree_eliminar(arbol->left, dato, comp, destr);
+  }else if(comparacion > 0){
+    return bstree_eliminar(arbol->right, dato, comp, destr);
+  }
+
+  if(gbtree_es_hoja(arbol)){
+    gbtree_destruir(arbol, destr);
+    return NULL;
+  }
+
+  BSTree target;
+  if(gbtree_empty(arbol->left)){
+    target = arbol->right;
+  }
+
+  target = arbol->left;
+}
