@@ -1,4 +1,5 @@
 #include "../arboles/gbtree.h"
+#include "../pilas/gstack.h"
 #include "bstree.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -74,9 +75,23 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
     return bstree_eliminar(arbol->right, dato, comp, destr);
   }
 
+  // El nodo a eliminar es una hoja
   if(gbtree_es_hoja(arbol)){
     gbtree_destruir(arbol, destr);
     return NULL;
+  }
+
+  // El nodo a eliminar tiene dos hijos
+  if(arbol->left != NULL && arbol->right != NULL){
+    Pila stack = pila_crear(); 
+    GBTree bigger = arbol->left;
+    stack = pila_apilar(stack, bigger);
+    while(bigger->right != NULL){
+      stack = pila_apilar(stack, bigger->right);
+      bigger = bigger->right;
+    }
+    GBTree last = pila_tope(stack);
+    
   }
 
   BSTree target;
