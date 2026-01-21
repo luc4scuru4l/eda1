@@ -68,36 +68,75 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
     return NULL;
   
   int comparacion = comp(dato, arbol->dato);
-
+  printf("Comparando el %d con el %d: %d\n", *((int*) dato), *((int*) arbol->dato), comparacion);
   if(comparacion < 0){
     return bstree_eliminar(arbol->left, dato, comp, destr);
   }else if(comparacion > 0){
     return bstree_eliminar(arbol->right, dato, comp, destr);
   }
-
+  puts("Encontrado!!!");
   // El nodo a eliminar es una hoja
   if(gbtree_es_hoja(arbol)){
+    puts("El nodo a eliminar es una hoja");
     gbtree_destruir(arbol, destr);
     return NULL;
   }
 
   // El nodo a eliminar tiene dos hijos
   if(arbol->left != NULL && arbol->right != NULL){
-    Pila stack = pila_crear(); 
-    GBTree bigger = arbol->left;
-    stack = pila_apilar(stack, bigger);
-    while(bigger->right != NULL){
-      stack = pila_apilar(stack, bigger->right);
-      bigger = bigger->right;
-    }
-    GBTree last = pila_tope(stack);
+    puts("El nodo a eliminar tiene dos hijos");
+    Pila stack = pila_crear();
+    stack = pila_apilar(stack, arbol);
+    printf("Estoy apilando el nodo con el dato %d\n", *((int*) arbol->dato));
+    GBTree current = arbol->left;
+    do {
+      printf("Estoy apilando el nodo con el dato %d\n", *((int*) current->dato));
+      stack = pila_apilar(stack, current);
+      printf("El tope de la pila es %d\n", *((int*) ((GBTree) pila_tope(stack))->dato));
+      current = current->right;
+    }while(!gbtree_empty(current));
     
-  }
+    GBTree bigger = pila_tope(stack);
+    stack = pila_desapilar(stack, NULL);
 
-  BSTree target;
+    printf("El nodo más grande tiene el dato %d\n", *((int*) bigger->dato));
+    fflush(stdout);
+
+    GBTree padre_bigger = pila_tope(stack);
+    stack = pila_desapilar(stack, NULL);
+
+    printf("El padre del nodo más grande tiene el dato %d\n", *((int*) padre_bigger->dato));
+    fflush(stdout);
+    if(gbtree_es_hoja(bigger)){
+      padre_bigger->right = NULL;
+    }else{
+      padre_bigger->right = bigger->left;
+    }
+    bigger->left = arbol->left;
+    bigger->right = arbol->right;
+
+    arbol->left = NULL;
+    arbol->right = NULL;
+
+    gbtree_destruir(arbol, destr);
+    pila_destruir(&stack, NULL);
+
+    return bigger;
+  }
+  puts("El nodo a eliminar tiene solo un hijo");
+  //El nodo a eliminar tiene solo un hijo
+  GBTree target;  
   if(gbtree_empty(arbol->left)){
     target = arbol->right;
+  }else{
+    target = arbol->left;
   }
 
-  target = arbol->left;
+  arbol->left = NULL;
+  arbol->right = NULL;
+
+  gbtree_destruir(arbol, destr);
+
+  return target;
+
 }

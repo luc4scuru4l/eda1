@@ -71,3 +71,19 @@ GList glist_invertir(GList lista){
 
   return first;
 }
+
+void* glist_obtener_primero(GList lista){
+  if(NULL == lista)
+    return NULL;
+  return lista->dato;
+}
+
+void glist_eliminar_primero(GList* lista, FuncionDestructora destr){
+  if(NULL == lista || NULL == *lista)
+    return;
+  GNodo* primero = *lista;
+  *lista = (*lista)->sig;
+  primero->sig = NULL;
+
+  glist_destruir(&primero, destr);
+}
