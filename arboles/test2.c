@@ -100,6 +100,7 @@ int main() {
   arbol_n = bstree_eliminar(arbol_n, &delete, comparar_entero, destruir_entero);
   printf("Recorrido inorden: ");
   bstree_recorrer(arbol_n, BTREE_RECORRIDO_IN, imprimir_entero, NULL);
+  puts("");
   bstree_destruir(arbol_n, destruir_entero);
   return 0;
 }

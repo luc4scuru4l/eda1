@@ -85,41 +85,28 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
   // El nodo a eliminar tiene dos hijos
   if(arbol->left != NULL && arbol->right != NULL){
     puts("El nodo a eliminar tiene dos hijos");
-    Pila stack = pila_crear();
-    stack = pila_apilar(stack, arbol);
-    printf("Estoy apilando el nodo con el dato %d\n", *((int*) arbol->dato));
-    GBTree current = arbol->left;
-    do {
-      printf("Estoy apilando el nodo con el dato %d\n", *((int*) current->dato));
-      stack = pila_apilar(stack, current);
-      printf("El tope de la pila es %d\n", *((int*) ((GBTree) pila_tope(stack))->dato));
-      current = current->right;
-    }while(!gbtree_empty(current));
-    
-    GBTree bigger = pila_tope(stack);
-    stack = pila_desapilar(stack, NULL);
-
+    GBTree padre_bigger = arbol;
+    GBTree bigger = arbol->left;
+    while(!gbtree_empty(bigger->right)){
+      padre_bigger = bigger;
+      bigger = bigger->right;
+    }
     printf("El nodo más grande tiene el dato %d\n", *((int*) bigger->dato));
-    fflush(stdout);
-
-    GBTree padre_bigger = pila_tope(stack);
-    stack = pila_desapilar(stack, NULL);
-
     printf("El padre del nodo más grande tiene el dato %d\n", *((int*) padre_bigger->dato));
     fflush(stdout);
-    if(gbtree_es_hoja(bigger)){
-      padre_bigger->right = NULL;
+
+    // El padre del nodo más grande es el nodo a eliminar
+    if(padre_bigger == arbol){
+      bigger->right = arbol->right;
     }else{
       padre_bigger->right = bigger->left;
+      bigger->right = arbol->right;
+      bigger->left = arbol->left;
     }
-    bigger->left = arbol->left;
-    bigger->right = arbol->right;
 
     arbol->left = NULL;
     arbol->right = NULL;
-
     gbtree_destruir(arbol, destr);
-    pila_destruir(&stack, NULL);
 
     return bigger;
   }
