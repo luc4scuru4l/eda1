@@ -37,4 +37,10 @@ void bstree_recorrer(BSTree, BTreeOrdenDeRecorrido, FuncionVisitanteExtra,
  */
 BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora, FuncionDestructora);
 
+
+/**
+ * Retorna el k-ésimo nodo menor de un ABB
+ */
+void* bstree_k_esimo_menor(BSTree arbol, int k);
+
 #endif //__BSTREE_H__

@@ -120,3 +120,17 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
   return target;
 
 }
+
+void* bstree_k_esimo_menor(BSTree arbol, int k){
+  if(gbtree_empty(arbol) || k <= 0)
+    return NULL;
+  int nodos_izq = gbtree_nnodos(arbol->left);
+  if(nodos_izq + 1 == k){
+    return arbol->dato;
+  }
+  if(nodos_izq >= k){
+    return bstree_k_esimo_menor(arbol->left, k);
+  }else {
+    return bstree_k_esimo_menor(arbol->right, k - nodos_izq - 1);
+  }
+}
