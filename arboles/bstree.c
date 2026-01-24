@@ -68,32 +68,27 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
     return NULL;
   
   int comparacion = comp(dato, arbol->dato);
-  printf("Comparando el %d con el %d: %d\n", *((int*) dato), *((int*) arbol->dato), comparacion);
   if(comparacion < 0){
-    return bstree_eliminar(arbol->left, dato, comp, destr);
+    arbol->left = bstree_eliminar(arbol->left, dato, comp, destr); 
+    return arbol;
   }else if(comparacion > 0){
-    return bstree_eliminar(arbol->right, dato, comp, destr);
+    arbol->right = bstree_eliminar(arbol->right, dato, comp, destr);
+    return arbol;
   }
-  puts("Encontrado!!!");
   // El nodo a eliminar es una hoja
   if(gbtree_es_hoja(arbol)){
-    puts("El nodo a eliminar es una hoja");
     gbtree_destruir(arbol, destr);
     return NULL;
   }
 
   // El nodo a eliminar tiene dos hijos
   if(arbol->left != NULL && arbol->right != NULL){
-    puts("El nodo a eliminar tiene dos hijos");
     GBTree padre_bigger = arbol;
     GBTree bigger = arbol->left;
     while(!gbtree_empty(bigger->right)){
       padre_bigger = bigger;
       bigger = bigger->right;
     }
-    printf("El nodo más grande tiene el dato %d\n", *((int*) bigger->dato));
-    printf("El padre del nodo más grande tiene el dato %d\n", *((int*) padre_bigger->dato));
-    fflush(stdout);
 
     // El padre del nodo más grande es el nodo a eliminar
     if(padre_bigger == arbol){
@@ -110,7 +105,7 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
 
     return bigger;
   }
-  puts("El nodo a eliminar tiene solo un hijo");
+
   //El nodo a eliminar tiene solo un hijo
   GBTree target;  
   if(gbtree_empty(arbol->left)){
@@ -118,10 +113,8 @@ BSTree bstree_eliminar(BSTree arbol, void *dato, FuncionComparadora comp, Funcio
   }else{
     target = arbol->left;
   }
-
   arbol->left = NULL;
   arbol->right = NULL;
-
   gbtree_destruir(arbol, destr);
 
   return target;

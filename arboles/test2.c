@@ -9,7 +9,7 @@
  */
 
 #define N_PALABRAS 16
-#define N_NUMEROS 11
+#define N_NUMEROS 10
 
 static void *copiar_cadena(void *dato) {
   char *str = malloc(sizeof(char) * (strlen(dato) + 1));
@@ -61,7 +61,7 @@ int main() {
                                 "argentina", "santa fe", "rosario",  "unr",
                                 "edya",      "farmacia", "tiempo",   "celular"};
   
-  int numeritos[N_NUMEROS] = {15, 9, 20, 6, 14, 17, 64, 13, 26, 72, 1};
+  int numeritos[N_NUMEROS] = {15, 9, 20, 6, 14, 17, 64, 13, 26, 72};
 
   // Creamos un arbol vacio y le insertamos las palabras
   BSTree arbol = bstree_crear();
@@ -96,11 +96,33 @@ int main() {
   
   puts("");
   int delete = 15;
+  int delete2 = 17;
+  int delete3 = 20;
+  int delete4 = 99;
   printf("Eliminando el %d\n", delete);
   arbol_n = bstree_eliminar(arbol_n, &delete, comparar_entero, destruir_entero);
   printf("Recorrido inorden: ");
   bstree_recorrer(arbol_n, BTREE_RECORRIDO_IN, imprimir_entero, NULL);
   puts("");
+
+  printf("Eliminando el %d\n", delete2);
+  arbol_n = bstree_eliminar(arbol_n, &delete2, comparar_entero, destruir_entero);
+  printf("Recorrido inorden: ");
+  bstree_recorrer(arbol_n, BTREE_RECORRIDO_IN, imprimir_entero, NULL);
+  puts("");
+  
+  printf("Eliminando el %d\n", delete3);
+  arbol_n = bstree_eliminar(arbol_n, &delete3, comparar_entero, destruir_entero);
+  printf("Recorrido inorden: ");
+  bstree_recorrer(arbol_n, BTREE_RECORRIDO_IN, imprimir_entero, NULL);
+  puts("");
+
+  printf("Eliminando el %d\n", delete4);
+  arbol_n = bstree_eliminar(arbol_n, &delete4, comparar_entero, destruir_entero);
+  printf("Recorrido inorden: ");
+  bstree_recorrer(arbol_n, BTREE_RECORRIDO_IN, imprimir_entero, NULL);
+  puts("");
+
   bstree_destruir(arbol_n, destruir_entero);
   return 0;
 }
