@@ -138,9 +138,15 @@ static AVL_Nodo* avl_nodo_rotacion_simple_izq(AVL_Nodo* raiz) {
  * a derecha y retorna la nueva raiz.
  */
 static AVL_Nodo* avl_nodo_rotacion_simple_der(AVL_Nodo* raiz) {
-  /** COMPLETAR */
-  assert(0);
-  return raiz;
+  AVL_Nodo* hijoIzq = raiz->izq;
+  assert(hijoIzq != NULL);
+  // actualizar punteros
+  raiz->izq = hijoIzq->der;
+  hijoIzq->der = raiz;
+  // actualizar alturas
+  raiz->altura = 1 + avl_nodo_max_altura_hijos(raiz);
+  hijoIzq->altura = 1 + avl_nodo_max_altura_hijos(hijoIzq);
+  return hijoIzq;
 }
 
 /**
@@ -171,8 +177,10 @@ static AVL_Nodo* avl_nodo_rebalancear(AVL_Nodo* raiz) {
     raiz = avl_nodo_rotacion_simple_der(raiz);
 
   } else if (avl_nodo_factor_balance(raiz) == 2) { // desbalanceado a derecha
-    /** COMPLETAR */
-    assert(0);
+    if (avl_nodo_factor_balance(raiz->der) == -1) // desbalanceado RR
+      raiz->der = avl_nodo_rotacion_simple_der(raiz->der);
+    
+    raiz = avl_nodo_rotacion_simple_izq(raiz);
   }
 
   return raiz;
