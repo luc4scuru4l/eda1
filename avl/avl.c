@@ -279,3 +279,46 @@ void avl_recorrer(AVL arbol, AVLRecorrido orden, FuncionVisitanteExtra visita,
   void* extra) {
   avl_nodo_recorrer(arbol->raiz, orden, visita, extra);
 }
+
+static AVL _avl_eliminar(AVL_Nodo* raiz, void* dato, FuncionComparadora comp, FuncionDestructora destr){
+  if(NULL == raiz)
+    return NULL;
+  int comparacion = comp(dato, raiz->dato); 
+  if(comparacion == -1){
+    return _avl_eliminar(raiz->izq, dato, comp, destr);
+  }else if(comparacion == 1){
+    return _avl_eliminar(raiz->der, dato, comp, destr);
+  }
+
+  if(raiz->der == NULL && raiz->izq == NULL){
+    avl_nodo_destruir(raiz, destr);
+    return NULL;
+  }
+
+  if(raiz->der != NULL && raiz->izq != NULL){
+    AVL_Nodo* padre_bigger = raiz;
+    AVL_Nodo* bigger = raiz->izq;
+
+    while(bigger->der != NULL){
+      padre_bigger = bigger;
+      bigger = bigger->der; 
+    }
+
+    if(padre_bigger == raiz){
+      bigger->der = padre_bigger->der;
+    }else{
+      padre_bigger->der = NULL;
+      bigger->der = raiz->der;
+      bigger->izq = raiz->izq;
+    }
+    raiz->der = NULL;
+    raiz->izq = NULL;
+    
+    avl_nodo_destruir(raiz, destr);
+    return bigger;
+  }
+}
+
+AVL avl_eliminar(AVL arbol, void * dato){
+
+}
