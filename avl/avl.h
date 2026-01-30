@@ -49,6 +49,6 @@ void avl_recorrer(AVL, AVLRecorrido, FuncionVisitanteExtra, void *);
 /**
  * Elimina un nodo de un AVL. Como resultado obtenemos otro AVL.
  */
-AVL avl_eliminar(AVL, void *);
+void avl_eliminar(AVL, void *);
 
 #endif /* __AVL_H__*/

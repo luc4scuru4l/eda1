@@ -61,6 +61,28 @@ int main() {
 
   avl_destruir(arbol2);
 
+  // caso de prueba 2:
+  // arbol AVL de la practica,
+  // imprimiendo en preorden cada arbol intermedio
+  AVL arbol3 = avl_crear(copiar_puntero_entero, comparar_puntero_entero,
+    destruir_puntero_entero);
+  int numeros2[] = { 10, 20, 15, 25, 30, 16, 18, 19 };
+  for (int i = 0; i < 8; ++i) {
+    avl_insertar(arbol3, numeros2 + i);
+    printf("Se inserto %d. Recorrido preorden: ", numeros2[i]);
+    avl_recorrer(arbol3, AVL_RECORRIDO_PRE, imprimir_puntero_entero, NULL);
+    puts("");
+  }
+
+  printf("Ahora voy a eliminar el %d que es una hoja\n", 19);
+
+  avl_eliminar(arbol3, numeros2 + 7);
+  avl_recorrer(arbol3, AVL_RECORRIDO_PRE, imprimir_puntero_entero, NULL);
+  puts("");
+  assert(avl_buscar(arbol3, numeros2 + 7) == 0);
+  assert(avl_validar(arbol3) == 1);
+
+  avl_destruir(arbol3);
   puts("Ok");
 
   return 0;

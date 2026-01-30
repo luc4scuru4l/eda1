@@ -280,45 +280,48 @@ void avl_recorrer(AVL arbol, AVLRecorrido orden, FuncionVisitanteExtra visita,
   avl_nodo_recorrer(arbol->raiz, orden, visita, extra);
 }
 
-static AVL _avl_eliminar(AVL_Nodo* raiz, void* dato, FuncionComparadora comp, FuncionDestructora destr){
+static AVL_Nodo* _avl_eliminar(AVL_Nodo* raiz, void* dato, FuncionComparadora comp, FuncionDestructora destr){
   if(NULL == raiz)
     return NULL;
-  int comparacion = comp(dato, raiz->dato); 
-  if(comparacion == -1){
-    return _avl_eliminar(raiz->izq, dato, comp, destr);
-  }else if(comparacion == 1){
-    return _avl_eliminar(raiz->der, dato, comp, destr);
-  }
 
-  if(raiz->der == NULL && raiz->izq == NULL){
-    avl_nodo_destruir(raiz, destr);
-    return NULL;
+  int comparacion = comp(dato, raiz->dato);
+  if(comparacion < 0){
+    raiz->izq = _avl_eliminar(raiz->izq, dato, comp, destr);
+    return avl_nodo_rebalancear(raiz);
+  }else if(comparacion > 0){
+    raiz->der = _avl_eliminar(raiz->der, dato, comp, destr);
+    return avl_nodo_rebalancear(raiz);
   }
 
   if(raiz->der != NULL && raiz->izq != NULL){
-    AVL_Nodo* padre_bigger = raiz;
     AVL_Nodo* bigger = raiz->izq;
-
     while(bigger->der != NULL){
-      padre_bigger = bigger;
       bigger = bigger->der; 
     }
 
-    if(padre_bigger == raiz){
-      bigger->der = padre_bigger->der;
+    void* aBorrar = raiz->dato;
+    raiz->dato = bigger->dato;
+    bigger->dato = aBorrar;
+
+    raiz->izq = _avl_eliminar(raiz->izq, aBorrar, comp, destr);
+  }else{
+    AVL_Nodo* temp = raiz;
+    if(raiz->izq != NULL){
+      raiz = raiz->izq;
+    }else if(raiz->der != NULL){
+      raiz = raiz->der;
     }else{
-      padre_bigger->der = NULL;
-      bigger->der = raiz->der;
-      bigger->izq = raiz->izq;
+      raiz = NULL;
     }
-    raiz->der = NULL;
-    raiz->izq = NULL;
     
-    avl_nodo_destruir(raiz, destr);
-    return bigger;
+    avl_nodo_destruir(temp, destr);
   }
+
+  if(raiz == NULL)
+    return NULL;
+  return avl_nodo_rebalancear(raiz);
 }
 
-AVL avl_eliminar(AVL arbol, void * dato){
-
+void avl_eliminar(AVL arbol, void * dato){
+  arbol->raiz = _avl_eliminar(arbol->raiz, dato, arbol->comp, arbol->destr);
 }
