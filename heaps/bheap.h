@@ -36,7 +36,7 @@ int bheap_es_vacio(BHeap heap);
 void bheap_recorrer(BHeap heap, void* extra, FuncionVisitante visit);
 
 /**
- * Inserta una copia del dato en el heap. 
+ * Inserta una copia del dato en el heap, garantizando que se mantenga la propiedad de heap. 
  */
 void bheap_insertar(BHeap* heap, void* dato, FuncionCopiadora copy);
 
@@ -44,5 +44,10 @@ void bheap_insertar(BHeap* heap, void* dato, FuncionCopiadora copy);
  * Retorna la capacidad del heap.
  */
 size_t bheap_capacidad(BHeap heap);
+
+/**
+ * Elimina un del dato del heap, garantizando que se mantenga la propiedad de heap. 
+ */
+void bheap_eliminar(BHeap* heap, void* dato, FuncionDestructora destr);
 
 #endif
