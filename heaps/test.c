@@ -81,7 +81,32 @@ int main(){
     free((int*) otrosNumeros[i]);
   }
   free(otrosNumeros);
+  
+  int cant = 10000;
+  printf("Ahora voy a ordenar una arreglo de %d\n", cant);
+  puts("Este es mi arreglo desordenado");
+  void** numerosRandom = malloc(sizeof(void*) * cant);
+  for(int i = 0; i < cant; i++){
+    int* a = malloc(sizeof(int));
+    assert(a != NULL);
+    *a = rand() % cant;
+    numerosRandom[i] = a;
+    printf("%d ", *a);
+  }
+  puts("");
+  puts("Este es mi arreglo ordenado");
+  BHeap randomHeap = bheap_crear_desde_arr(numerosRandom, cant, copiar_entero, comparar_enteros);
+  while(!bheap_es_vacio(randomHeap)){
+    imprimir_entero(randomHeap->arr[1], NULL);
+    bheap_eliminar(&randomHeap, randomHeap->arr[1], destruir_entero);
+  }
+  bheap_destruir(&randomHeap, destruir_entero);
+  puts("");
 
+  for(int i = 0; i < cant; i++){
+    free((int*) numerosRandom[i]);
+  } 
+  free(numerosRandom);
   puts("Todo ok");
 
   return 0;
