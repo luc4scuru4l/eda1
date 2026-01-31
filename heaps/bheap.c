@@ -1,5 +1,6 @@
 #include "bheap.h"
 #include <assert.h>
+#include <stdio.h>
 
 BHeap bheap_crear(size_t capacidad, FuncionComparadora comp){
   assert(comp != NULL);
@@ -112,7 +113,7 @@ static void _bheap_sink(BHeap* ptrHeap, size_t toSinkIdx){
     void** nodoIzq = heap->arr + izq;
     if(der <= heap->ultimo){
       void** nodoDer = heap->arr + der;
-      if(heap->comp(*nodoIzq, *nodoDer) == -1){
+      if(heap->comp(*nodoIzq, *nodoDer) < 0){
         max = der;
       }else{
         max = izq;
@@ -164,4 +165,23 @@ void bheap_eliminar(BHeap* ptrHeap, void* dato, FuncionDestructora destr){
   }else{
     _bheap_sink(ptrHeap, aBorrar);
   }
+}
+
+BHeap bheap_crear_desde_arr(void **arr, size_t largo, FuncionCopiadora copiar, FuncionComparadora comp){
+  assert(arr != NULL && *arr != NULL);
+  assert(comp != NULL);
+  assert(copiar != NULL);
+  size_t zonaHojas = largo / 2;
+
+  BHeap heap = bheap_crear(largo, comp);
+  for(size_t i = 1; i <= largo; i++){
+    heap->arr[i] = copiar(arr[i - 1]);
+  }
+  heap->ultimo = largo;
+  while(zonaHojas >= 1){
+    _bheap_sink(&heap, zonaHojas);
+    zonaHojas--;
+  }
+
+  return heap;
 }

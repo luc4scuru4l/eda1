@@ -50,4 +50,8 @@ size_t bheap_capacidad(BHeap heap);
  */
 void bheap_eliminar(BHeap* heap, void* dato, FuncionDestructora destr);
 
+/**
+ * Crea un heap a partir de un array. 
+ */
+BHeap bheap_crear_desde_arr(void **arr, size_t largo, FuncionCopiadora copiar, FuncionComparadora comp);
 #endif

@@ -61,8 +61,26 @@ int main(){
   bheap_eliminar(&heap1, &toDelete3, destruir_entero);
   bheap_recorrer(heap1, NULL, imprimir_entero);
   puts("");
-
+  
   bheap_destruir(&heap1, destruir_entero);
+  
+  puts("Ahora voy a crear un heap a partir de un array con los numeros del 0 al 19");
+  void** otrosNumeros = malloc(sizeof(void*) * 20);
+  for(int i = 0; i < 20; i++){
+    int* aux = malloc(sizeof(int));
+    *aux = i;
+    otrosNumeros[i] = aux;
+  }
+  BHeap heap2 = bheap_crear_desde_arr(otrosNumeros, 20, copiar_entero, comparar_enteros);
+  bheap_recorrer(heap2, NULL, imprimir_entero);
+  puts("");
+  
+  bheap_destruir(&heap2, destruir_entero);
+
+  for(int i = 0; i < 20; i++){
+    free((int*) otrosNumeros[i]);
+  }
+  free(otrosNumeros);
 
   puts("Todo ok");
 
