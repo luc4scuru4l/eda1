@@ -34,6 +34,19 @@ int main(){
   bheap_recorrer(heap1, NULL, imprimir_entero);
   puts("");
 
+  int toAdd = 22;
+  printf("Ahora quiero añadir el elemento %d\n", toAdd);
+
+  bheap_insertar(&heap1, &toAdd, copiar_entero);
+
+  assert(heap1->capacidad == cantNumeros * 2);
+
+  bheap_recorrer(heap1, NULL, imprimir_entero);
+  puts("");
+
   bheap_destruir(&heap1, destruir_entero);
+
+  puts("Todo ok");
+  
   return 0;
 }

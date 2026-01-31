@@ -97,3 +97,7 @@ void bheap_insertar(BHeap* heap, void* dato, FuncionCopiadora copy){
   _bheap_float(heap);
 }
 
+size_t bheap_capacidad(BHeap heap){
+  assert(heap != NULL);
+  return heap->capacidad;
+}

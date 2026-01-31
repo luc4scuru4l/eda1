@@ -39,4 +39,10 @@ void bheap_recorrer(BHeap heap, void* extra, FuncionVisitante visit);
  * Inserta una copia del dato en el heap. 
  */
 void bheap_insertar(BHeap* heap, void* dato, FuncionCopiadora copy);
+
+/**
+ * Retorna la capacidad del heap.
+ */
+size_t bheap_capacidad(BHeap heap);
+
 #endif
