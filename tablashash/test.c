@@ -92,6 +92,8 @@ int main() {
   printf("El nuevo contacto es: ");
   contacto_imprimir(ret);
   puts("");
+  
+  printf("La cantidad final de elementos en la tabla es %d\n", tablahash_nelems(tabla));
 
   // Liberar memoria
   tablahash_destruir(tabla);
