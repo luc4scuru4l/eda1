@@ -11,7 +11,8 @@ void glist_destruir(GList* lista, FuncionDestructora destr){
     return;
   for(GNodo* nodo = *lista; nodo != NULL;){
     GNodo* next = nodo->sig;
-    destr(nodo->dato);
+    if(destr != NULL)
+      destr(nodo->dato);
     free(nodo);
     nodo = next;
   }
@@ -152,4 +153,10 @@ int glist_reemplazar(GList* ptrLista, void* dato, void* nuevoDato, FuncionCompar
   destr(nodo->dato);
   free(nodo);
   return 1;
+}
+
+void glist_recorrer_extra(GList lista, void* extra, FuncionVisitanteExtra visit){
+  for(GNodo* nodo = lista; nodo != NULL; nodo = nodo->sig){
+    visit(nodo->dato, extra);
+  }
 }

@@ -95,6 +95,21 @@ int main() {
   
   printf("La cantidad final de elementos en la tabla es %d\n", tablahash_nelems(tabla));
 
+  puts("Voy a tratar de redimensionar la tabla");
+  tablahash_redimensionar(&tabla);
+
+  printf("\nBusqueda:\n");
+  for (int i = 0; i < 6; ++i) {
+    printf("Buscando el contacto: ");
+    contacto_imprimir(agenda[i]);
+    puts("");
+    Contacto *ret = tablahash_buscar(tabla, agenda[i]);
+    if (ret != NULL)
+      printf("\tSe encuentra en la tabla.\n");
+    else
+      printf("\tNo se encuentra en la tabla.\n");
+  }
+
   // Liberar memoria
   tablahash_destruir(tabla);
   for (int i = 0; i < 6; ++i)

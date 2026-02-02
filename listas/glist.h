@@ -64,4 +64,8 @@ int glist_eliminar(GList* ptrLista, void* dato, FuncionComparadora comp, Funcion
  */
 int glist_reemplazar(GList* ptrLista, void* dato, void* nuevoDato, FuncionComparadora comp, FuncionDestructora destr);
 
+/**
+ * Recorre la lista pasandole como argumento un dato extra al nodo visitado.
+ */
+void glist_recorrer_extra(GList lista, void* extra, FuncionVisitanteExtra visit);
 #endif

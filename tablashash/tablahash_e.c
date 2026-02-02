@@ -149,3 +149,32 @@ void tablahash_eliminar(TablaHash tabla, void *dato) {
   if(resultado == 1)
     tabla->numElems--;
 }
+
+static void _tablahash_insertar(void* tablaHash, void* dato){
+  TablaHash tabla = *((TablaHash*) tablaHash);
+  tablahash_insertar(tabla, dato);
+}
+
+void tablahash_redimensionar(TablaHash* ptrTabla){
+  assert(ptrTabla != NULL && *ptrTabla != NULL);
+  TablaHash tabla = *ptrTabla;
+  unsigned capacidadAnterior = tabla->capacidad;
+  unsigned nuevaCapacidad = tabla->capacidad * 2;
+  CasillaHash* arrAnterior = tabla->elems;  
+  CasillaHash* arrNuevo = malloc(sizeof(CasillaHash) * nuevaCapacidad);
+  for(unsigned i = 0; i < nuevaCapacidad; i++){
+    arrNuevo[i].rebalse = NULL;
+  }
+  assert(arrNuevo != NULL);
+  tabla->elems = arrNuevo;
+  tabla->capacidad = nuevaCapacidad;
+
+  for(unsigned i = 0; i < capacidadAnterior; i++){
+    if(arrAnterior[i].rebalse == NULL){
+      continue;
+    }
+    glist_recorrer_extra(arrAnterior[i].rebalse, ptrTabla, _tablahash_insertar);
+    glist_destruir(&(arrAnterior[i].rebalse), tabla->destr);
+  }
+  free(arrAnterior);
+}
