@@ -96,7 +96,7 @@ int main() {
   printf("La cantidad final de elementos en la tabla es %d\n", tablahash_nelems(tabla));
 
   puts("Voy a tratar de redimensionar la tabla");
-  tablahash_redimensionar(&tabla);
+  tablahash_redimensionar(tabla);
 
   printf("\nBusqueda:\n");
   for (int i = 0; i < 6; ++i) {
@@ -105,7 +105,7 @@ int main() {
     puts("");
     Contacto *ret = tablahash_buscar(tabla, agenda[i]);
     if (ret != NULL)
-      printf("\tSe encuentra en la tabla.\n");
+      printf("\tSe encuentra en la tabla. En la casilla %d\n", contacto_heashear(agenda[i]) % tablahash_capacidad(tabla));
     else
       printf("\tNo se encuentra en la tabla.\n");
   }

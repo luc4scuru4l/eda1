@@ -48,6 +48,6 @@ void tablahash_eliminar(TablaHash tabla, void *dato);
 /**
  * Elimina el dato de la tabla que coincida con el dato dado.
  */
-void tablahash_redimensionar(TablaHash* tabla);
+void tablahash_redimensionar(TablaHash tabla);
 
 #endif /* __TABLAHASH_H__ */

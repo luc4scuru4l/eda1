@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#define FACTOR_CARGA_MAX 0.7
 /**
  * Casillas en la que almacenaremos los datos de la tabla hash.
  */
@@ -81,12 +81,15 @@ void tablahash_destruir(TablaHash tabla) {
   return;
 }
 
+static float _tablahash_factor_carga(TablaHash tabla){
+  return tabla->numElems * 1.0 / tabla->capacidad;
+}
+
 /**
  * Inserta un dato en la tabla, o lo reemplaza si ya se encontraba.
  * IMPORTANTE: La implementacion no maneja colisiones.
  */
 void tablahash_insertar(TablaHash tabla, void *dato) {
-
   // Calculamos la posicion del dato dado, de acuerdo a la funcion hash.
   unsigned idx = tabla->hash(dato) % tabla->capacidad;
 
@@ -94,22 +97,16 @@ void tablahash_insertar(TablaHash tabla, void *dato) {
   if(nodo == NULL){
     tabla->elems[idx].rebalse = glist_agregar_inicio(tabla->elems[idx].rebalse, tabla->copia(dato));
     tabla->numElems++;
+
+    if(_tablahash_factor_carga(tabla) > FACTOR_CARGA_MAX){
+      tablahash_redimensionar(tabla);
+    }
     return;
   }
   
   glist_reemplazar(&(tabla->elems[idx].rebalse), nodo, tabla->copia(dato), tabla->comp, tabla->destr);
 }
 
-// typedef struct {
-//   char *nombre;
-//   char *tel;
-//   unsigned int edad;
-// } Test;
-
-// static void imprimir(void* contacto){
-//   Test c = *((Test*) contacto);
-//   printf("{%s, %s, %d}", c.nombre, c.tel, c.edad);
-// }
 /**
  * Retorna el dato de la tabla que coincida con el dato dado, o NULL si el dato
  * buscado no se encuentra en la tabla.
@@ -150,14 +147,13 @@ void tablahash_eliminar(TablaHash tabla, void *dato) {
     tabla->numElems--;
 }
 
-static void _tablahash_insertar(void* tablaHash, void* dato){
-  TablaHash tabla = *((TablaHash*) tablaHash);
-  tablahash_insertar(tabla, dato);
-}
+// static void _tablahash_insertar(void* tablaHash, void* dato){
+//   TablaHash tabla = *((TablaHash*) tablaHash);
+//   tablahash_insertar(tabla, dato);
+// }
 
-void tablahash_redimensionar(TablaHash* ptrTabla){
-  assert(ptrTabla != NULL && *ptrTabla != NULL);
-  TablaHash tabla = *ptrTabla;
+void tablahash_redimensionar(TablaHash tabla){
+  assert(tabla != NULL);
   unsigned capacidadAnterior = tabla->capacidad;
   unsigned nuevaCapacidad = tabla->capacidad * 2;
   CasillaHash* arrAnterior = tabla->elems;  
@@ -173,8 +169,11 @@ void tablahash_redimensionar(TablaHash* ptrTabla){
     if(arrAnterior[i].rebalse == NULL){
       continue;
     }
-    glist_recorrer_extra(arrAnterior[i].rebalse, ptrTabla, _tablahash_insertar);
-    glist_destruir(&(arrAnterior[i].rebalse), tabla->destr);
+    for(GNodo* nodo = arrAnterior[i].rebalse; nodo != NULL; nodo = nodo->sig){
+      unsigned nuevaKey = tabla->hash(nodo->dato) % tabla->capacidad;
+      arrNuevo[nuevaKey].rebalse = glist_agregar_inicio(arrNuevo[nuevaKey].rebalse, nodo->dato);
+    }
+    glist_destruir(&(arrAnterior[i].rebalse), NULL);
   }
   free(arrAnterior);
 }
