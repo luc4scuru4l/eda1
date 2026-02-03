@@ -5,6 +5,7 @@
 typedef void (*FuncionDestructora) (void*);
 typedef int (*FuncionComparadora) (void*, void*);
 typedef void* (*FuncionCopiadora) (void*);
+typedef void (*FuncionVisitanteExtra) (void*, void*);
 
 typedef struct _AVL {
   void* dato;
@@ -19,14 +20,24 @@ typedef struct _AVL {
 AVL avl_crear();
 
 /**
- * dest
- * 
+ * Destruye un AVL.
  */
 void avl_destruir(AVL* arbol, FuncionDestructora destroy);
+
+/**
+ * Recorre un AVL.
+ */
+
+void avl_recorrer(AVL arbol, void* extra, FuncionVisitanteExtra visit);
 
 /**
  * Inserta un dato en el AVL.
  */
 void avl_insertar(AVL* ptrArbol, void* dato, FuncionComparadora comp, FuncionCopiadora copiar);
+
+/**
+ * Elimina un dato del AVL.
+ */
+void avl_eliminar(AVL* ptrArbol, void* dato, FuncionComparadora comp, FuncionDestructora destroy);
 
 #endif
