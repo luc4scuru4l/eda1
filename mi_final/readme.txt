@@ -9,3 +9,6 @@ Ejercicio 2:
 gcc -c tablahash.c
 gcc -o ej2.out ejercicio2.c tablahash.o -Wall -Wextra -Werror --pedantic --std=c99
 valgrind --leak-check=full --show-leak-kinds=all ./ej2.out
+
+
+13/02/26: Aprobé con 10 ;)
